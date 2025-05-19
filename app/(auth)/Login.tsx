@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import colors from "../../data/styling/colors";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "@/api/auth";
+import { getToken, deleteToken } from "@/api/storage";
 
 const Index = () => {
 	const [email, setEmail] = useState("");
