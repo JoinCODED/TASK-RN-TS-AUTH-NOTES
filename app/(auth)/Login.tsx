@@ -1,19 +1,25 @@
 import { KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import colors from "../../data/styling/colors";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "@/api/auth";
 import { getToken, deleteToken } from "@/api/storage";
+import { useRouter } from "expo-router";
+import AuthContext from "@/context/AuthContext";
 
 const Index = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+	const router = useRouter();
 
 	const { mutate, data } = useMutation({
 		mutationKey: ["Login"],
 		mutationFn: () => login({ email, password }),
 		onSuccess: () => {
-			alert("Login Success");
+			// alert("Login Success");
+			setIsAuthenticated(true);
+			router.replace("/");
 		},
 		onError: () => {
 			alert("Failed");
