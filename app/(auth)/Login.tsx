@@ -8,11 +8,6 @@ const Index = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
-	const handleLogin = () => {
-		console.log({ email, password });
-		mutate();
-	};
-
 	const { mutate, data } = useMutation({
 		mutationKey: ["Login"],
 		mutationFn: () => login({ email, password }),
@@ -23,6 +18,11 @@ const Index = () => {
 			alert("Failed");
 		},
 	});
+	console.log("Login Data", data);
+	const handleLogin = () => {
+		console.log({ email, password });
+		mutate();
+	};
 	return (
 		<KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
 			<View
