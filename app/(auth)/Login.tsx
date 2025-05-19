@@ -58,7 +58,7 @@ const Index = () => {
               marginTop: 20,
             }}
             placeholder="Email"
-            onChangeText={(text) => setEmail(text)}
+            onChangeText={(text) => setEmail(text.toLowerCase())}
           />
 
           <TextInput
@@ -69,7 +69,7 @@ const Index = () => {
               marginTop: 20,
             }}
             placeholder="Password"
-            onChangeText={(text) => setPassword(text)}
+            onChangeText={(text) => setPassword(text.toLowerCase())}
           />
 
           <TouchableOpacity
