@@ -7,10 +7,30 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import colors from "../../data/styling/colors";
+import { useMutation } from "@tanstack/react-query";
+import { login } from "@/api/auth";
 
 const Index = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { mutate, data } = useMutation({
+    mutationKey: ["login"],
+    mutationFn: () => login({ email, password }),
+    onSuccess: () => {
+      alert("YOU ARE LOGGED IN");
+    },
+    onError: () => {
+      alert("YOU ARE NOT LOGGED IN");
+    },
+  });
+
+  const handlelogin = () => {
+    mutate();
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -38,6 +58,7 @@ const Index = () => {
               marginTop: 20,
             }}
             placeholder="Email"
+            onChangeText={(text) => setEmail(text)}
           />
 
           <TextInput
@@ -48,6 +69,7 @@ const Index = () => {
               marginTop: 20,
             }}
             placeholder="Password"
+            onChangeText={(text) => setPassword(text)}
           />
 
           <TouchableOpacity
@@ -58,7 +80,9 @@ const Index = () => {
               marginTop: 20,
               alignItems: "center",
             }}
-            onPress={() => {}}
+            onPress={() => {
+              handlelogin();
+            }}
           >
             <Text
               style={{
