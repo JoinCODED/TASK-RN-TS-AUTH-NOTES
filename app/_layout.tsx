@@ -11,15 +11,17 @@ export default function RootLayout() {
 	const [isAuthenticated, setIsAuthenticated] = useState(false); //defined : Similar to use state but to globalize it to all the pages
 	const [ready, setReady] = useState(false);
 
+	const checkToken = async () => {
+		const token = await getToken();
+		if (token) {
+			setIsAuthenticated(true);
+		}
+		setReady(true);
+	};
+
 	useEffect(() => {
-		const checkToken = async () => {
-			const token = await getToken();
-			if (token) {
-				setIsAuthenticated(true);
-			}
-			setReady(true);
-		};
 		checkToken();
+		// deleteToken();
 	}, []);
 
 	if (!ready) {
