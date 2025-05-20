@@ -73,14 +73,13 @@ const Index = () => {
 							marginTop: 20,
 							alignItems: "center",
 						}}
-						onPress={() => {}}>
+						onPress={handleLogin}>
 						<Text
 							style={{
 								color: colors.primary,
 								fontWeight: "bold",
 								fontSize: 16,
-							}}
-							onPress={handleLogin}>
+							}}>
 							Login
 						</Text>
 					</TouchableOpacity>
