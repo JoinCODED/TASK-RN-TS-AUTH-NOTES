@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet } from "react-native";
 import React from "react";
-import colors from "../../../data/styling/colors";
-import UserProfileCard from "../../../components/UserProfileCard";
+import colors from "../../../../data/styling/colors";
+import UserProfileCard from "../../../../components/UserProfileCard";
 const Users = () => {
   return (
     <ScrollView style={{ flex: 1, backgroundColor: colors.primary }}>
