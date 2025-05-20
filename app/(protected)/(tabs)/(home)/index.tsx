@@ -26,12 +26,6 @@ const Home = () => {
 				flex: 1,
 				backgroundColor: colors.primary,
 			}}>
-			<Button
-				title="Logout"
-				onPress={async () => {
-					await deleteToken();
-					setIsAuthenticated(false);
-				}}></Button>
 			<ScrollView
 				style={{
 					flex: 1,
@@ -42,6 +36,12 @@ const Home = () => {
 				showsVerticalScrollIndicator={false}>
 				<Note key={"1"} note={note} />
 			</ScrollView>
+			<Button
+				title="Logout"
+				onPress={async () => {
+					await deleteToken();
+					setIsAuthenticated(false);
+				}}></Button>
 		</View>
 	);
 };

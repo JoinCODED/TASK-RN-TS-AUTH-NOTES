@@ -4,7 +4,7 @@ import colors from "../../data/styling/colors";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "@/api/auth";
 import { getToken, deleteToken } from "@/api/storage";
-import { useRouter } from "expo-router";
+import { Redirect, useRouter } from "expo-router";
 import AuthContext from "@/context/AuthContext";
 
 const Index = () => {
@@ -83,10 +83,20 @@ const Index = () => {
 							Login
 						</Text>
 					</TouchableOpacity>
-
-					<Text style={{ color: colors.white, fontSize: 16 }}>
-						Don't have an account? <Text style={{ color: colors.white, fontWeight: "bold" }}>Register</Text>
-					</Text>
+					<TouchableOpacity
+						style={{
+							padding: 10,
+							borderRadius: 5,
+							marginTop: 20,
+							alignItems: "center",
+						}}
+						onPress={() => {
+							<Redirect href={"/Register"} />;
+						}}>
+						<Text style={{ color: colors.white, fontSize: 16 }}>
+							Don't have an account? <Text style={{ color: colors.white, fontWeight: "bold" }}>Register</Text>
+						</Text>
+					</TouchableOpacity>
 				</View>
 			</View>
 		</KeyboardAvoidingView>
