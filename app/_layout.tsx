@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import { Redirect, router, Stack } from "expo-router";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import colors from "../data/styling/colors";
 import { ActivityIndicator, StatusBar, View } from "react-native";
@@ -11,18 +11,23 @@ export default function RootLayout() {
 	const [isAuthenticated, setIsAuthenticated] = useState(false); //defined : Similar to use state but to globalize it to all the pages
 	const [ready, setReady] = useState(false);
 
-	const checkToken = async () => {
-		const token = await getToken();
-		if (token) {
-			setIsAuthenticated(true);
-		}
-		setReady(true);
-	};
+	useEffect(() => {
+		const checkToken = async () => {
+			const token = await getToken();
+			if (token) {
+				setIsAuthenticated(true);
+			}
+			setReady(true);
+		};
+
+		checkToken();
+	}, []);
 
 	useEffect(() => {
-		checkToken();
-		// deleteToken();
-	}, []);
+		if (ready && isAuthenticated) {
+			router.replace("/");
+		}
+	}, [ready, isAuthenticated]);
 
 	if (!ready) {
 		return (
@@ -31,6 +36,7 @@ export default function RootLayout() {
 			</View>
 		);
 	}
+
 	return (
 		<SafeAreaProvider>
 			<SafeAreaView style={{ flex: 1, backgroundColor: colors.primary }}>

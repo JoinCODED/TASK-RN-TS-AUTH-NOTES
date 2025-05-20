@@ -4,7 +4,7 @@ import colors from "../../data/styling/colors";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "@/api/auth";
 import { getToken, deleteToken } from "@/api/storage";
-import { Redirect, useRouter } from "expo-router";
+import { Link, Redirect, useRouter } from "expo-router";
 import AuthContext from "@/context/AuthContext";
 
 const Index = () => {
@@ -20,12 +20,13 @@ const Index = () => {
 			// alert("Login Success");
 			setIsAuthenticated(true);
 			router.replace("/");
+			console.log("Login Data", data);
 		},
 		onError: () => {
 			alert("Failed");
+			console.log("Login Data", data);
 		},
 	});
-	console.log("Login Data", data);
 	const handleLogin = () => {
 		console.log({ email, password });
 		mutate();
@@ -89,12 +90,12 @@ const Index = () => {
 							borderRadius: 5,
 							marginTop: 20,
 							alignItems: "center",
-						}}
-						onPress={() => {
-							<Redirect href={"/Register"} />;
 						}}>
 						<Text style={{ color: colors.white, fontSize: 16 }}>
-							Don't have an account? <Text style={{ color: colors.white, fontWeight: "bold" }}>Register</Text>
+							Don't have an account?{" "}
+							<Text style={{ color: colors.white, fontWeight: "bold" }}>
+								<Link href="/Register">Register</Link>
+							</Text>
 						</Text>
 					</TouchableOpacity>
 				</View>

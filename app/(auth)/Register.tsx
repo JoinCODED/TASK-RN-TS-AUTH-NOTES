@@ -1,25 +1,51 @@
-import { KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
+import { Image, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, { useContext, useState } from "react";
 import colors from "../../data/styling/colors";
 import { register } from "@/api/auth";
 import { useMutation } from "@tanstack/react-query";
+import { Link, router } from "expo-router";
+import * as ImagePicker from "expo-image-picker";
+import AuthContext from "@/context/AuthContext";
 
 const Register = () => {
+	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [image, setImage] = useState<string | null>(null);
+	const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+
+	const pickImage = async () => {
+		// No permissions request is necessary for launching the image library
+		let result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ["images", "videos"],
+			allowsEditing: true,
+			aspect: [4, 3],
+			quality: 1,
+		});
+
+		console.log(result);
+
+		if (!result.canceled) {
+			setImage(result.assets[0].uri);
+		}
+	};
 
 	const { mutate, data } = useMutation({
 		mutationKey: ["Register"],
-		mutationFn: () => register({ email, password }),
+		mutationFn: () => register({ email, password }, name, image || ""),
 		onSuccess: () => {
 			alert("Registered");
+			setIsAuthenticated(true);
+			router.replace("/");
+			console.log("Registration Data", data);
 		},
 		onError: () => {
 			alert("Failed");
+			console.log("Registration Data", data);
 		},
 	});
-	console.log("Registration Data", data);
-	const handleRegistration = () => {
+
+	const handleRegister = () => {
 		console.log({ email, password });
 		mutate();
 	};
@@ -45,7 +71,16 @@ const Register = () => {
 						Register
 					</Text>
 					<Text style={{ color: colors.white, fontSize: 16 }}>Create your account</Text>
-
+					<TextInput
+						style={{
+							backgroundColor: colors.white,
+							padding: 10,
+							borderRadius: 5,
+							marginTop: 20,
+						}}
+						placeholder="Name"
+						onChangeText={(name) => setName(name)}
+					/>
 					<TextInput
 						style={{
 							backgroundColor: colors.white,
@@ -54,7 +89,7 @@ const Register = () => {
 							marginTop: 20,
 						}}
 						placeholder="Email"
-						onChangeText={(email) => setPassword(email)}
+						onChangeText={(email) => setEmail(email)}
 					/>
 
 					<TextInput
@@ -68,7 +103,9 @@ const Register = () => {
 						onChangeText={(password) => setPassword(password)}
 					/>
 
-					<TouchableOpacity style={{ marginTop: 20 }}>
+					{image && <Image source={{ uri: image }} style={styles.image} />}
+
+					<TouchableOpacity style={{ marginTop: 20 }} onPress={pickImage}>
 						<Text style={{ color: colors.white, fontSize: 16 }}>Upload Profile Image</Text>
 					</TouchableOpacity>
 
@@ -86,14 +123,17 @@ const Register = () => {
 								fontWeight: "bold",
 								fontSize: 16,
 							}}
-							onPress={handleRegistration}>
+							onPress={handleRegister}>
 							Register
 						</Text>
 					</TouchableOpacity>
 
 					<TouchableOpacity style={{ marginTop: 20, alignItems: "center" }}>
 						<Text style={{ color: colors.white, fontSize: 16 }}>
-							Already have an account? <Text style={{ color: colors.white, fontWeight: "bold" }}>Login</Text>
+							Already have an account?{" "}
+							<Text style={{ color: colors.white, fontWeight: "bold" }}>
+								<Link href="/Register">Login</Link>
+							</Text>
 						</Text>
 					</TouchableOpacity>
 				</View>
@@ -104,4 +144,9 @@ const Register = () => {
 
 export default Register;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+	image: {
+		width: 200,
+		height: 200,
+	},
+});

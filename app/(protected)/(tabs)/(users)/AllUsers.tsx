@@ -2,14 +2,31 @@ import { ScrollView, StyleSheet } from "react-native";
 import React from "react";
 import colors from "../../../../data/styling/colors";
 import UserProfileCard from "../../../../components/UserProfileCard";
+import { useQuery } from "@tanstack/react-query";
+// import { getAllUsers, me } from "@/api/auth";
+
 const Users = () => {
+	const { data } = useQuery({
+		queryKey: ["myprofile"],
+		queryFn: me,
+	});
+	// const { data1 } = useQuery({
+	// 	queryKey: ["users"],
+	// 	queryFn: getAllUsers,
+	// });
+
 	return (
 		<ScrollView style={{ flex: 1, backgroundColor: colors.primary }}>
-			<UserProfileCard
-				imageUrl="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-				email="test@test.com"
-				username="test"
-			/>
+			<UserProfileCard imageUrl={`https://task-react-auth-backend.eapi.joincoded.com/${data?.image}`} email={data?.email} username={data?.name} />
+
+			{/* {data1?.map((users: any) => (
+				<UserProfileCard
+					key={users._id}
+					imageUrl={`https://task-react-auth-backend.eapi.joincoded.com/${data?.image}`}
+					email={data?.email}
+					username={data?.name}
+				/>
+			))} */}
 		</ScrollView>
 	);
 };

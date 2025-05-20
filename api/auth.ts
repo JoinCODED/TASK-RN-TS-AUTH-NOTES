@@ -10,12 +10,28 @@ const login = async (userInfo: UserInfo) => {
 	return data;
 };
 
-const register = async (userInfo: UserInfo) => {
-	const { data } = await instance.post("/auth/register", userInfo);
+const register = async (userInfo: UserInfo, name: string, image: string) => {
+	const registerUser = {
+		email: userInfo.email,
+		password: userInfo.password,
+		name: name,
+		image: image,
+	};
 
-	// if (data.token) {
-	// 	storeToken(data.token);
-	// }
+	const formData = new FormData();
+	formData.append("email", userInfo.email);
+	formData.append("password", userInfo.password);
+	formData.append("name", name);
+	formData.append("image", {
+		name: "image.jpg",
+		uri: image,
+		type: "image/jpeg",
+	} as any);
+	const { data } = await instance.post("/auth/register", registerUser);
+
+	if (data.token) {
+		storeToken(data.token);
+	}
 
 	return data;
 };

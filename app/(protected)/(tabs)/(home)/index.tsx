@@ -4,9 +4,16 @@ import colors from "../../../../data/styling/colors";
 import Note from "../../../../components/Note";
 import { deleteToken } from "@/api/storage";
 import AuthContext from "@/context/AuthContext";
+import { useQuery } from "@tanstack/react-query";
+import { getAllNotes } from "@/api/notes";
 
 const Home = () => {
 	const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+
+	const { data } = useQuery({
+		queryKey: ["notes"],
+		queryFn: getAllNotes,
+	});
 	const note = {
 		_id: "1",
 		title: "Note 1",
@@ -34,7 +41,9 @@ const Home = () => {
 					flexGrow: 1,
 				}}
 				showsVerticalScrollIndicator={false}>
-				<Note key={"1"} note={note} />
+				{data?.map((note: any) => (
+					<Note key={note._id} note={note} />
+				))}
 			</ScrollView>
 			<Button
 				title="Logout"
