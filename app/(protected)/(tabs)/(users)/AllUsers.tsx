@@ -3,6 +3,7 @@ import React from "react";
 import colors from "../../../../data/styling/colors";
 import UserProfileCard from "../../../../components/UserProfileCard";
 import { useQuery } from "@tanstack/react-query";
+import { me } from "@/api/auth";
 // import { getAllUsers, me } from "@/api/auth";
 
 const Users = () => {
