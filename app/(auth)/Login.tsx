@@ -7,10 +7,39 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
-import colors from "../../data/styling/colors";
+import React, { useContext, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { login } from "@/api/auth";
+import { Link, useRouter } from "expo-router";
+import AuthContext from "@/context/AuthContext";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import colors from "@/data/styling/colors";
 
 const Index = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+  const router = useRouter();
+
+  const { mutate, data } = useMutation({
+    mutationKey: ["Login"],
+    mutationFn: () => login({ email, password }),
+    onSuccess: () => {
+      setIsAuthenticated(true);
+      router.replace("/");
+      alert("Logged in successfully!");
+    },
+
+    onError: () => {
+      alert("Wrong email or password");
+    },
+  });
+
+  console.log("This is the login Data:", data);
+  const handleLogin = () => {
+    console.log("This is the data sent", { email, password });
+    mutate();
+  };
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -38,6 +67,10 @@ const Index = () => {
               marginTop: 20,
             }}
             placeholder="Email"
+            keyboardType="email-address"
+            returnKeyType="done"
+            placeholderTextColor={colors.primary}
+            onChangeText={(text) => setEmail(text)}
           />
 
           <TextInput
@@ -48,6 +81,10 @@ const Index = () => {
               marginTop: 20,
             }}
             placeholder="Password"
+            returnKeyType="done"
+            placeholderTextColor={colors.primary}
+            onChangeText={(text) => setPassword(text)}
+            secureTextEntry={true}
           />
 
           <TouchableOpacity
@@ -58,7 +95,18 @@ const Index = () => {
               marginTop: 20,
               alignItems: "center",
             }}
-            onPress={() => {}}
+            onPress={() => {
+              if (!email.trim() && !password.trim()) {
+                return alert("Please enter your email and password");
+              }
+              if (!email.trim()) {
+                return alert("Please enter your email");
+              }
+              if (!password.trim()) {
+                return alert("Please enter your password");
+              }
+              handleLogin();
+            }}
           >
             <Text
               style={{
@@ -73,9 +121,11 @@ const Index = () => {
 
           <Text style={{ color: colors.white, fontSize: 16 }}>
             Don't have an account?{" "}
-            <Text style={{ color: colors.white, fontWeight: "bold" }}>
-              Register
-            </Text>
+            <Link href={"/Register"}>
+              <Text style={{ color: colors.white, fontWeight: "bold" }}>
+                Register
+              </Text>
+            </Link>
           </Text>
         </View>
       </View>
