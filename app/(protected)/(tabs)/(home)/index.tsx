@@ -134,7 +134,7 @@ const Home = () => {
         {/* <Note key={"1"} note={note} /> */}
       </ScrollView>
       <FAB
-        icon="plus"
+        icon="note-plus-outline"
         style={styles.fab}
         onPress={() => router.push("/CreateNote")}
       />
