@@ -132,7 +132,7 @@ const Register = () => {
 						<Text style={{ color: colors.white, fontSize: 16 }}>
 							Already have an account?{" "}
 							<Text style={{ color: colors.white, fontWeight: "bold" }}>
-								<Link href="/Register">Login</Link>
+								<Link href="/Login">Login</Link>
 							</Text>
 						</Text>
 					</TouchableOpacity>
