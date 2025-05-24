@@ -7,10 +7,33 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useContext, useState } from "react";
 import colors from "../../data/styling/colors";
+import { useMutation } from "@tanstack/react-query";
+import { login } from "@/api/auth";
+import { useRouter } from "expo-router";
+import AuthContext from "@/context/AuthContext";
 
 const Index = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+  const { mutate, data } = useMutation({
+    mutationKey: ["login"],
+    mutationFn: () => login({ email, password }),
+    onSuccess: () => {
+      alert("Login Successful");
+      setIsAuthenticated(true);
+      router.replace("/(tabs)");
+    },
+  });
+
+  console.log("Login Data", data);
+  const handleLogin = () => {
+    console.log("Data Sent", { email, password });
+    mutate();
+  };
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -31,6 +54,7 @@ const Index = () => {
           </Text>
 
           <TextInput
+            onChangeText={(text) => setEmail(text)}
             style={{
               backgroundColor: colors.white,
               padding: 10,
@@ -41,6 +65,7 @@ const Index = () => {
           />
 
           <TextInput
+            onChangeText={(text) => setPassword(text)}
             style={{
               backgroundColor: colors.white,
               padding: 10,
@@ -58,7 +83,7 @@ const Index = () => {
               marginTop: 20,
               alignItems: "center",
             }}
-            onPress={() => {}}
+            onPress={handleLogin}
           >
             <Text
               style={{
