@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useContext, useRef } from "react";
+import React, { useContext, useRef, useState } from "react";
 import colors from "../../../../data/styling/colors";
 import Note from "../../../../components/Note";
 import { deleteToken } from "@/api/storage";
@@ -16,10 +16,11 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllNotes } from "@/api/notes";
 import Entypo from "@expo/vector-icons/Entypo";
 import { useScrollToTop } from "@react-navigation/native";
-import { FAB } from "react-native-paper";
+import { FAB, Searchbar } from "react-native-paper";
 import { router } from "expo-router";
 
 const Home = () => {
+  const [searchQuery, setSearchQuery] = useState("");
   const ref = useRef<ScrollView>(null);
 
   useScrollToTop(ref);
@@ -33,6 +34,14 @@ const Home = () => {
     // refetchOnReconnect: true,
     // refetchOnMount: true,
   });
+
+  //search by the title or body or username
+  const filterdNotes = data?.filter(
+    (note: any) =>
+      note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      note.body.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      note.user?.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   if (isFetching) {
     return (
@@ -71,19 +80,6 @@ const Home = () => {
       { cancelable: true }
     );
   };
-  const note = {
-    _id: "1",
-    title: "Note 1",
-    topic: ["Topic 1", "Topic 2"],
-    body: "Note Body",
-    user: {
-      _id: "1",
-      name: "User 1",
-      email: "user1@example.com",
-      createdAt: "2021-01-01",
-      updatedAt: "2021-01-01",
-    },
-  };
 
   return (
     <View
@@ -92,6 +88,14 @@ const Home = () => {
         backgroundColor: colors.primary,
       }}
     >
+      <Searchbar
+        placeholder="Search notes..."
+        placeholderTextColor={colors.black}
+        iconColor={colors.black}
+        onChangeText={setSearchQuery}
+        value={searchQuery}
+        style={{ margin: 10 }}
+      />
       <ScrollView
         ref={ref}
         style={{
@@ -102,33 +106,39 @@ const Home = () => {
         }}
         showsVerticalScrollIndicator={false}
       >
-        <TouchableOpacity
+        <View
           style={{
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "row",
-            marginRight: 32,
-            marginTop: 10,
-          }}
-          onPress={() => {
-            handleLogout();
+            width: "100%",
+            alignItems: "flex-end",
           }}
         >
-          <Text
+          <TouchableOpacity
             style={{
-              color: "white",
-              fontSize: 20,
-              width: "100%",
-              textAlign: "right",
-              marginRight: 5,
-              fontWeight: "bold",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "row",
+              marginRight: 14,
+              width: 100,
+            }}
+            onPress={() => {
+              handleLogout();
             }}
           >
-            Logout
-          </Text>
-          <Entypo name="log-out" size={24} color="white" />
-        </TouchableOpacity>
-        {data?.map((note: any) => (
+            <Text
+              style={{
+                color: "white",
+                fontSize: 20,
+                textAlign: "center",
+                marginRight: 5,
+                fontWeight: "bold",
+              }}
+            >
+              Logout
+            </Text>
+            <Entypo name="log-out" size={24} color="white" />
+          </TouchableOpacity>
+        </View>
+        {filterdNotes.map((note: any) => (
           <Note key={note._id} note={note} />
         ))}
         {/* <Note key={"1"} note={note} /> */}

@@ -66,12 +66,14 @@ const Index = () => {
               borderRadius: 5,
               marginTop: 20,
             }}
-            placeholder="Email"
+            placeholder={!email.trim() ? "Email" : "Email"}
             keyboardType="email-address"
             returnKeyType="done"
             placeholderTextColor={colors.primary}
             onChangeText={(text) => setEmail(text)}
+            
           />
+          {/* <Text></Text> */}
 
           <TextInput
             style={{

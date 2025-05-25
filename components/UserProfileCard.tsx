@@ -46,7 +46,7 @@ const UserProfileCard = ({
           fontSize: 24,
           fontWeight: "bold",
           marginBottom: 8,
-          color: colors.primary,
+          color: colors.black,
         }}
       >
         {username ? username : "Dawood"}
@@ -54,7 +54,7 @@ const UserProfileCard = ({
       <Text
         style={{
           fontSize: 16,
-          color: colors.primary,
+          color: colors.black,
           fontWeight: "600",
           opacity: 0.8,
         }}

@@ -35,7 +35,7 @@ const Note = ({ note }: { note: NoteType }) => {
       >
         <Text
           style={{
-            color: colors.primary,
+            color: colors.black,
             fontSize: 24,
             fontWeight: "bold",
             marginBottom: 8,
@@ -45,7 +45,7 @@ const Note = ({ note }: { note: NoteType }) => {
         </Text>
         <Text
           style={{
-            color: colors.primary,
+            color: colors.black,
             fontSize: 16,
             fontWeight: "600",
             opacity: 0.8,
