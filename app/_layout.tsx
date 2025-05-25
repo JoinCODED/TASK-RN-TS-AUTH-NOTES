@@ -45,7 +45,7 @@ export default function RootLayout() {
           <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
             <Stack screenOptions={{ headerShown: false }}>
               <Stack.Screen name="(auth)" />
-              <Stack.Screen name="(tabs)" />
+              <Stack.Screen name="(protected)" />
             </Stack>
           </AuthContext.Provider>
         </QueryClientProvider>

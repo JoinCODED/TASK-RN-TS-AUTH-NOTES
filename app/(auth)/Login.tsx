@@ -12,7 +12,6 @@ import { useMutation } from "@tanstack/react-query";
 import { login } from "@/api/auth";
 import { Link, useRouter } from "expo-router";
 import AuthContext from "@/context/AuthContext";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import colors from "@/data/styling/colors";
 
 const Index = () => {
@@ -71,7 +70,6 @@ const Index = () => {
             returnKeyType="done"
             placeholderTextColor={colors.primary}
             onChangeText={(text) => setEmail(text)}
-            
           />
           {/* <Text></Text> */}
 
