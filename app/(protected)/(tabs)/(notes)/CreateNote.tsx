@@ -7,8 +7,10 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-import colors from "../../../data/styling/colors";
+import colors from "../../../../data/styling/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useMutation } from "@tanstack/react-query";
+import { createNote } from "@/api/notes";
 
 const AddNote = () => {
   const [title, setTitle] = useState("");
@@ -24,7 +26,13 @@ const AddNote = () => {
     newTopics[index] = text;
     setTopics(newTopics);
   };
-
+  const { mutate } = useMutation({
+    mutationKey: ["createNote"],
+    mutationFn: () => createNote({ title, body: noteBody, topic: topics }),
+  });
+  const handleCreateNote = () => {
+    mutate();
+  };
   return (
     <SafeAreaView
       style={{
@@ -173,6 +181,7 @@ const AddNote = () => {
               borderWidth: 1,
               borderColor: "rgba(0,0,0,0.1)",
             }}
+            onPress={handleCreateNote}
           >
             <Text
               style={{

@@ -7,10 +7,37 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useContext, useState } from "react";
 import colors from "../../data/styling/colors";
+import { useMutation } from "@tanstack/react-query";
+import { login } from "@/api/auth";
+import AuthContext from "@/context/AuthContext";
+import { Link, router, useRouter } from "expo-router";
 
 const Index = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+  const router = useRouter();
+
+  const { mutate, data } = useMutation({
+    mutationKey: ["login"],
+    mutationFn: () => login({ email, password }),
+    onSuccess: () => {
+      // alert("YOU ARE LOGGED IN");
+      // on success change the context to true>> user is authenticated
+      setIsAuthenticated(true);
+      router.replace("/");
+    },
+    onError: () => {
+      alert("YOU ARE NOT LOGGED IN");
+    },
+  });
+
+  const handlelogin = () => {
+    mutate();
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -38,6 +65,7 @@ const Index = () => {
               marginTop: 20,
             }}
             placeholder="Email"
+            onChangeText={(text) => setEmail(text.toLowerCase())}
           />
 
           <TextInput
@@ -48,6 +76,7 @@ const Index = () => {
               marginTop: 20,
             }}
             placeholder="Password"
+            onChangeText={(text) => setPassword(text.toLowerCase())}
           />
 
           <TouchableOpacity
@@ -58,7 +87,9 @@ const Index = () => {
               marginTop: 20,
               alignItems: "center",
             }}
-            onPress={() => {}}
+            onPress={() => {
+              handlelogin();
+            }}
           >
             <Text
               style={{
@@ -73,9 +104,11 @@ const Index = () => {
 
           <Text style={{ color: colors.white, fontSize: 16 }}>
             Don't have an account?{" "}
-            <Text style={{ color: colors.white, fontWeight: "bold" }}>
-              Register
-            </Text>
+            <Link href={"/Register"}>
+              <Text style={{ color: colors.white, fontWeight: "bold" }}>
+                Register
+              </Text>
+            </Link>
           </Text>
         </View>
       </View>

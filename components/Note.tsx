@@ -51,7 +51,7 @@ const Note = ({ note }: { note: NoteType }) => {
             opacity: 0.8,
           }}
         >
-          Created By: {note.user.name}
+          Created By: {note.user?.name}
         </Text>
 
         <View
