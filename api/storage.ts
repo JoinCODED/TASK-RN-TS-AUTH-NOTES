@@ -4,13 +4,13 @@ const saveToken = async (key: string, token: string) => {
   await SecureStore.setItemAsync("token", token);
 };
 
-const getToken = async (key: string) => {
-  const token = await SecureStore.getItemAsync(key);
+const getToken = async () => {
+  const token = await SecureStore.getItemAsync("token");
   return token;
 };
 
-const deleteToken = async (key: string) => {
-  await SecureStore.deleteItemAsync(key);
+const deleteToken = async () => {
+  await SecureStore.deleteItemAsync("token");
 };
 
 export { saveToken, getToken, deleteToken };
