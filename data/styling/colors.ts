@@ -1,10 +1,10 @@
 const colors = {
-    primary: "#111827",
-    secondary: "#1F2937",
-    tertiary: "#374151",
-    quaternary: "#6B7280",
-    white: "#FFFFFF",
-    black: "#000000",
+  primary: "#CCD6A6", // clear sky-blue
+  secondary: "#F4EAD5", // aqua
+  tertiary: "#DAE2B6", // pastel pink
+  quaternary: "#CCD6A6", // soft gold
+  white: "#FFFFFF",
+  black: "#000000",
 };
 
 export default colors;

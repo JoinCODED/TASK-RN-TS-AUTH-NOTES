@@ -35,7 +35,7 @@ const Note = ({ note }: { note: NoteType }) => {
       >
         <Text
           style={{
-            color: colors.white,
+            color: colors.black,
             fontSize: 24,
             fontWeight: "bold",
             marginBottom: 8,
@@ -45,13 +45,13 @@ const Note = ({ note }: { note: NoteType }) => {
         </Text>
         <Text
           style={{
-            color: colors.white,
+            color: colors.black,
             fontSize: 16,
             fontWeight: "600",
             opacity: 0.8,
           }}
         >
-          Created By: {note.user.name}
+          Created By: {note.user?.name}
         </Text>
 
         <View
@@ -62,8 +62,9 @@ const Note = ({ note }: { note: NoteType }) => {
             marginBottom: 10,
           }}
         >
-          {note.topic?.map((topic) => (
+          {note.topic?.map((topic, index) => (
             <View
+              key={index}
               style={{
                 backgroundColor: colors.tertiary,
                 padding: 12,
@@ -71,7 +72,7 @@ const Note = ({ note }: { note: NoteType }) => {
                 marginBottom: 5,
               }}
             >
-              <Text>{topic}</Text>
+              <Text style={{ color: "white" }}>{topic}</Text>
             </View>
           ))}
         </View>

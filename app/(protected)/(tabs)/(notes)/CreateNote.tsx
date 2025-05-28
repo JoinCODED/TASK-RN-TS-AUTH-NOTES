@@ -1,5 +1,4 @@
 import {
-  StyleSheet,
   Text,
   View,
   TextInput,
@@ -7,13 +6,42 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-import colors from "../../../data/styling/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createNote } from "@/api/notes";
+import colors from "@/data/styling/colors";
 
 const AddNote = () => {
   const [title, setTitle] = useState("");
   const [topics, setTopics] = useState([""]);
   const [noteBody, setNoteBody] = useState("");
+  // const queryClient = useQueryClient();
+
+  const { mutate } = useMutation({
+    mutationKey: ["CreateNote"],
+    mutationFn: () => createNote({ title, body: noteBody, topic: topics }),
+    onSuccess: () => {
+      alert("Note Craeted Successfully!");
+      setTopics([""]);
+      setTitle("");
+      setNoteBody("");
+      // queryClient.invalidateQueries({
+      //   queryKey: ["getNotes"],
+      // });
+    },
+    onError: () => {
+      alert("Note Create Faild");
+    },
+  });
+
+  const handleCreateNote = () => {
+    console.log({ title, topics, noteBody });
+    if (!title.trim() || !topics || !noteBody.trim()) {
+      return alert("Please enter the missing");
+    }
+
+    mutate();
+  };
 
   const addTopic = () => {
     setTopics([...topics, ""]);
@@ -78,9 +106,11 @@ const AddNote = () => {
               borderWidth: 1,
               borderColor: "rgba(0,0,0,0.1)",
             }}
+            returnKeyType="next"
             value={title}
             onChangeText={setTitle}
             placeholder="Note Title"
+            placeholderTextColor={colors.primary}
           />
 
           {topics.map((topic, index) => (
@@ -99,9 +129,11 @@ const AddNote = () => {
                 borderWidth: 1,
                 borderColor: "rgba(0,0,0,0.1)",
               }}
+              returnKeyType="next"
               value={topic}
               onChangeText={(text) => updateTopic(text, index)}
               placeholder={`Topic ${index + 1}`}
+              placeholderTextColor={colors.primary}
             />
           ))}
 
@@ -152,11 +184,13 @@ const AddNote = () => {
               borderWidth: 1,
               borderColor: "rgba(0,0,0,0.1)",
             }}
+            returnKeyType="done"
             value={noteBody}
             onChangeText={setNoteBody}
             placeholder="Note Content"
             multiline
             numberOfLines={4}
+            placeholderTextColor={colors.primary}
           />
 
           <TouchableOpacity
@@ -173,6 +207,7 @@ const AddNote = () => {
               borderWidth: 1,
               borderColor: "rgba(0,0,0,0.1)",
             }}
+            onPress={handleCreateNote}
           >
             <Text
               style={{

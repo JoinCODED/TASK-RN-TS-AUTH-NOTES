@@ -2,7 +2,7 @@ import { Text, View, Image } from "react-native";
 import React from "react";
 import colors from "../data/styling/colors";
 
-interface UserProfileCardProps {
+export interface UserProfileCardProps {
   imageUrl: string;
   email: string;
   username: string;
@@ -35,8 +35,8 @@ const UserProfileCard = ({
             : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
         }}
         style={{
-          width: 80,
-          height: 80,
+          width: 90,
+          height: 90,
           borderRadius: 40,
           marginBottom: 15,
         }}
@@ -46,7 +46,7 @@ const UserProfileCard = ({
           fontSize: 24,
           fontWeight: "bold",
           marginBottom: 8,
-          color: colors.white,
+          color: colors.black,
         }}
       >
         {username ? username : "Dawood"}
@@ -54,7 +54,7 @@ const UserProfileCard = ({
       <Text
         style={{
           fontSize: 16,
-          color: colors.white,
+          color: colors.black,
           fontWeight: "600",
           opacity: 0.8,
         }}
