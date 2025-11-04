@@ -1,3 +1,4 @@
+/// step 4
 import {
   KeyboardAvoidingView,
   Platform,
@@ -7,10 +8,40 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useContext, useState } from "react";
 import colors from "../../data/styling/colors";
+import { useMutation } from "@tanstack/react-query";
+import { login } from "@/api/auth";
+import { useRouter } from "expo-router";
+import AuthContext from "@/context/Authcontext";
 
 const Index = () => {
+  const [email, setEmail] = useState ("");
+  const [password, setPassword] = useState ("");
+  // step 4 start here, similar to step 3 code line
+  const {isAuthenticated, setIsAuthenticated} = useContext(AuthContext);
+
+  /// useRouter is similar to link 
+  const router = useRouter();
+
+ const {mutate, data} = useMutation({
+    mutationKey:["Login"],
+    mutationFn: () => login({ email, password }),
+    onSuccess: () => { alert("loging sucsesfull");
+      //// step 4.2
+      setIsAuthenticated(true);
+
+      /// how "/" means home page ? - why did we change add to replace ?
+      router.replace("/")
+    },
+
+  })
+  
+  console.log("data", data);
+  const handleLogin = () => {
+    console.log ("Data sent to BE", {email, password});
+    mutate();
+  }
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -38,6 +69,7 @@ const Index = () => {
               marginTop: 20,
             }}
             placeholder="Email"
+            onChangeText={(text)=> setEmail(text)}
           />
 
           <TextInput
@@ -48,6 +80,7 @@ const Index = () => {
               marginTop: 20,
             }}
             placeholder="Password"
+            onChangeText={(text)=> setPassword(text)}
           />
 
           <TouchableOpacity
@@ -58,7 +91,7 @@ const Index = () => {
               marginTop: 20,
               alignItems: "center",
             }}
-            onPress={() => {}}
+            onPress={handleLogin}
           >
             <Text
               style={{

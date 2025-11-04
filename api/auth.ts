@@ -1,10 +1,14 @@
 import UserInfo from "@/types/UserInfo";
 import instance from ".";
+import { store } from "expo-router/build/global-state/router-store";
+import { storeToken } from "./storage";
 
 
 
 const login = async (userInfo: UserInfo) => {
     const { data } = await instance.post("/auth/login", userInfo);
+    /// added the login token below
+    if (data.token) {storeToken(data.token);}
     return data;
 };
 

@@ -1,9 +1,14 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import React from "react";
-import colors from "../../../data/styling/colors";
-import Note from "../../../components/Note";
+//// logout
+
+import { Button, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useContext } from "react";
+import colors from "../../../../data/styling/colors";
+import Note from "../../../../components/Note";
+import { deleteToken } from "@/api/storage";
+import AuthContext from "@/context/Authcontext";
 
 const Home = () => {
+  const {setIsAuthenticated} = useContext(AuthContext);
   const note = {
     _id: "1",
     title: "Note 1",
@@ -24,6 +29,11 @@ const Home = () => {
         backgroundColor: colors.primary,
       }}
     >
+      <Button title=" Logout button" onPress={ async()=>{
+        await deleteToken();
+        setIsAuthenticated(false);
+      }}/>
+
       <ScrollView
         style={{
           flex: 1,
