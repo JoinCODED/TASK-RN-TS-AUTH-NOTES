@@ -6,10 +6,39 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from "react-native";
-import React from "react";
+import React, { useContext, useState } from "react";
 import colors from "../../data/styling/colors";
+import AuthContext from "../../contexts/AuthContext";
+import { useRouter } from "expo-router";
+import { useMutation } from "@tanstack/react-query";
+import { register as registerApi } from "../../api/auth";
+import { setToken } from "../../api/storage";
+
 const Register = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { setIsAuthenticated } = useContext(AuthContext);
+  const router = useRouter();
+
+  const registerMutation = useMutation({
+    mutationFn: registerApi,
+    onSuccess: async (data) => {
+      await setToken(data.token);
+      setIsAuthenticated(true);
+    },
+    onError: (error) => {
+      console.error("Registration failed:", error);
+    },
+  });
+
+  const handleRegister = () => {
+    if (email && password) {
+      registerMutation.mutate({ email, password });
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -47,6 +76,11 @@ const Register = () => {
               marginTop: 20,
             }}
             placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            editable={!registerMutation.isPending}
           />
 
           <TextInput
@@ -57,9 +91,16 @@ const Register = () => {
               marginTop: 20,
             }}
             placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            editable={!registerMutation.isPending}
           />
 
-          <TouchableOpacity style={{ marginTop: 20 }}>
+          <TouchableOpacity
+            style={{ marginTop: 20 }}
+            disabled={registerMutation.isPending}
+          >
             <Text style={{ color: colors.white, fontSize: 16 }}>
               Upload Profile Image
             </Text>
@@ -73,19 +114,28 @@ const Register = () => {
               marginTop: 20,
               alignItems: "center",
             }}
+            onPress={handleRegister}
+            disabled={registerMutation.isPending}
           >
-            <Text
-              style={{
-                color: colors.primary,
-                fontWeight: "bold",
-                fontSize: 16,
-              }}
-            >
-              Register
-            </Text>
+            {registerMutation.isPending ? (
+              <ActivityIndicator color={colors.primary} />
+            ) : (
+              <Text
+                style={{
+                  color: colors.primary,
+                  fontWeight: "bold",
+                  fontSize: 16,
+                }}
+              >
+                Register
+              </Text>
+            )}
           </TouchableOpacity>
 
-          <TouchableOpacity style={{ marginTop: 20, alignItems: "center" }}>
+          <TouchableOpacity
+            style={{ marginTop: 20, alignItems: "center" }}
+            onPress={() => router.push("/(auth)/Login")}
+          >
             <Text style={{ color: colors.white, fontSize: 16 }}>
               Already have an account?{" "}
               <Text style={{ color: colors.white, fontWeight: "bold" }}>

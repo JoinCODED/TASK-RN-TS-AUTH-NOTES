@@ -1,9 +1,8 @@
 import UserInfo from "@/types/UserInfo";
 import instance from ".";
 
-
-
 const login = async (userInfo: UserInfo) => {
+    console.log("login", userInfo);
     const { data } = await instance.post("/auth/login", userInfo);
     return data;
 };

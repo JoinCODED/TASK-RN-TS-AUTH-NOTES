@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import React from "react";
 import { Tabs } from "expo-router";
-import colors from "../../data/styling/colors";
+import colors from "../../../data/styling/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 const TabLayout = () => {
   return (
@@ -30,7 +30,7 @@ const TabLayout = () => {
         }}
       />
       <Tabs.Screen
-        name="(notes)"
+        name="(notes)/CreateNote"
         options={{
           headerShown: false,
           title: "Add Note",
@@ -40,7 +40,7 @@ const TabLayout = () => {
         }}
       />
       <Tabs.Screen
-        name="(users)"
+        name="(users)/AllUsers"
         options={{
           title: "Users",
           tabBarIcon: ({ color, size }) => (

@@ -6,11 +6,43 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from "react-native";
-import React from "react";
+import React, { useContext, useState } from "react";
 import colors from "../../data/styling/colors";
+import AuthContext from "../../contexts/AuthContext";
+import { useRouter } from "expo-router";
+import { useMutation } from "@tanstack/react-query";
+import { login } from "../../api/auth";
+import { setToken } from "../../api/storage";
 
 const Index = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { setIsAuthenticated } = useContext(AuthContext);
+  const router = useRouter();
+
+  const loginMutation = useMutation({
+    mutationFn: ({ email, password }: { email: string; password: string }) =>
+      login({ email, password }),
+    onSuccess: async (data) => {
+      console.log("login success", data);
+      await setToken(data.token);
+      setIsAuthenticated(true);
+      router.push("/(protected)/(tabs)");
+    },
+    onError: (error) => {
+      console.log("login error", error);
+      console.error("Login failed:", error);
+    },
+  });
+
+  const handleLogin = () => {
+    if (email && password) {
+      loginMutation.mutate({ email, password });
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -26,6 +58,16 @@ const Index = () => {
         }}
       >
         <View style={{ width: "100%", padding: 20 }}>
+          <Text
+            style={{
+              color: colors.white,
+              fontSize: 24,
+              fontWeight: "bold",
+              marginBottom: 10,
+            }}
+          >
+            Login
+          </Text>
           <Text style={{ color: colors.white, fontSize: 16 }}>
             Login to your account
           </Text>
@@ -38,6 +80,11 @@ const Index = () => {
               marginTop: 20,
             }}
             placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            editable={!loginMutation.isPending}
           />
 
           <TextInput
@@ -48,6 +95,10 @@ const Index = () => {
               marginTop: 20,
             }}
             placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            editable={!loginMutation.isPending}
           />
 
           <TouchableOpacity
@@ -58,25 +109,35 @@ const Index = () => {
               marginTop: 20,
               alignItems: "center",
             }}
-            onPress={() => {}}
+            onPress={handleLogin}
+            disabled={loginMutation.isPending}
           >
-            <Text
-              style={{
-                color: colors.primary,
-                fontWeight: "bold",
-                fontSize: 16,
-              }}
-            >
-              Login
-            </Text>
+            {loginMutation.isPending ? (
+              <ActivityIndicator color={colors.primary} />
+            ) : (
+              <Text
+                style={{
+                  color: colors.primary,
+                  fontWeight: "bold",
+                  fontSize: 16,
+                }}
+              >
+                Login
+              </Text>
+            )}
           </TouchableOpacity>
 
-          <Text style={{ color: colors.white, fontSize: 16 }}>
-            Don't have an account?{" "}
-            <Text style={{ color: colors.white, fontWeight: "bold" }}>
-              Register
+          <TouchableOpacity
+            style={{ marginTop: 20, alignItems: "center" }}
+            onPress={() => router.push("/(auth)/Register")}
+          >
+            <Text style={{ color: colors.white, fontSize: 16 }}>
+              Don't have an account?{" "}
+              <Text style={{ color: colors.white, fontWeight: "bold" }}>
+                Register
+              </Text>
             </Text>
-          </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </KeyboardAvoidingView>
