@@ -62,7 +62,7 @@ const Note = ({ note }: { note: NoteType }) => {
             marginBottom: 10,
           }}
         >
-          {note.topic?.map((topic) => (
+          {note.topic?.map((topic, index) => (
             <View
               style={{
                 backgroundColor: colors.tertiary,
@@ -70,6 +70,7 @@ const Note = ({ note }: { note: NoteType }) => {
                 borderRadius: 10,
                 marginBottom: 5,
               }}
+              key={index}
             >
               <Text>{topic}</Text>
             </View>
