@@ -15,7 +15,7 @@ const HomeLayout = () => {
         },
       }}
     >
-      <Stack.Screen name="index" options={{ title: "Home" }} />
+      <Stack.Screen name="home" options={{ title: "Home" }} />
       <Stack.Screen name="[noteId]" options={{ title: "Note Details" }} />
     </Stack>
   );

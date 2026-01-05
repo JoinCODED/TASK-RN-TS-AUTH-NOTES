@@ -7,10 +7,19 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import colors from "../../data/styling/colors";
+import { router } from "expo-router";
 
 const Index = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async () => {
+    console.log(email, password);
+    router.push("/(tabs)/(home)/home");
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -38,6 +47,11 @@ const Index = () => {
               marginTop: 20,
             }}
             placeholder="Email"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            placeholderTextColor={colors.black}
           />
 
           <TextInput
@@ -48,6 +62,10 @@ const Index = () => {
               marginTop: 20,
             }}
             placeholder="Password"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            secureTextEntry
+            placeholderTextColor={colors.black}
           />
 
           <TouchableOpacity
@@ -58,7 +76,7 @@ const Index = () => {
               marginTop: 20,
               alignItems: "center",
             }}
-            onPress={() => {}}
+            onPress={handleLogin}
           >
             <Text
               style={{
@@ -71,12 +89,16 @@ const Index = () => {
             </Text>
           </TouchableOpacity>
 
-          <Text style={{ color: colors.white, fontSize: 16 }}>
-            Don't have an account?{" "}
-            <Text style={{ color: colors.white, fontWeight: "bold" }}>
-              Register
+          <TouchableOpacity
+            style={{ marginTop: 20, alignItems: "center" }}
+            onPress={() => {
+              router.push("/(auth)/Register");
+            }}
+          >
+            <Text style={{ color: colors.white, fontSize: 16 }}>
+              Don't have an account? Register
             </Text>
-          </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </KeyboardAvoidingView>

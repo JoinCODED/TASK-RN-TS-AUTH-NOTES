@@ -10,6 +10,7 @@ interface NoteType {
         createdAt: string;
         updatedAt: string;
     }
+
 }
 
 export { NoteType };

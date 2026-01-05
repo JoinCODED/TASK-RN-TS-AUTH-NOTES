@@ -7,9 +7,17 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import colors from "../../data/styling/colors";
+
 const Register = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleRegister = async () => {
+    console.log(email, password);
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -47,6 +55,11 @@ const Register = () => {
               marginTop: 20,
             }}
             placeholder="Email"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            placeholderTextColor={colors.black}
           />
 
           <TextInput
@@ -57,6 +70,10 @@ const Register = () => {
               marginTop: 20,
             }}
             placeholder="Password"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            secureTextEntry
+            placeholderTextColor={colors.black}
           />
 
           <TouchableOpacity style={{ marginTop: 20 }}>
@@ -73,6 +90,7 @@ const Register = () => {
               marginTop: 20,
               alignItems: "center",
             }}
+            onPress={handleRegister}
           >
             <Text
               style={{

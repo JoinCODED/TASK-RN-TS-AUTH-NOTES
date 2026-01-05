@@ -1,8 +1,45 @@
-import { StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import colors from "../../../data/styling/colors";
+import { useQuery } from "@tanstack/react-query";
+import { getNote } from "../../../api/notes";
+import { useLocalSearchParams } from "expo-router";
 
 const NoteDetails = () => {
+  const { noteId: id } = useLocalSearchParams();
+  const { data: note, isLoading } = useQuery({
+    queryKey: ["note", id],
+    queryFn: () => getNote(id as string),
+  });
+
+  if (isLoading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colors.primary,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <ActivityIndicator size="large" color={colors.white} />
+      </View>
+    );
+  }
+  if (!note) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colors.primary,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text style={{ color: colors.white }}>Note not found</Text>
+      </View>
+    );
+  }
   return (
     <View
       style={{
@@ -35,7 +72,7 @@ const NoteDetails = () => {
             marginBottom: 15,
           }}
         >
-          {"Note Title"}
+          {note.title}
         </Text>
 
         <View
@@ -46,8 +83,11 @@ const NoteDetails = () => {
             marginBottom: 20,
           }}
         >
-          <Text style={{ color: colors.white }}>{"Topic1"}</Text>
-          <Text style={{ color: colors.white }}>{"Topic2"}</Text>
+          {note.topic.map((topic: string) => (
+            <Text key={topic} style={{ color: colors.white }}>
+              {topic}
+            </Text>
+          ))}
         </View>
 
         <Text
@@ -57,7 +97,7 @@ const NoteDetails = () => {
             lineHeight: 24,
           }}
         >
-          {"Note Body"}
+          {note.body}
         </Text>
       </View>
     </View>
